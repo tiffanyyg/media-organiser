@@ -269,3 +269,19 @@ storage/cache/
 storage/logs/
 storage/reports/
 storage/thumbnails/
+
+# Media storage (personal files)
+storage/
+
+# Runtime data
+data/
+
+# Generated thumbnails
+thumbnails/
+
+# Databases
+*.db
+
+# Logs
+*.log
+
