@@ -3,6 +3,8 @@ import typer
 from pathlib import Path
 
 from app.importer.pipeline import import_media
+from app.database.database import SessionLocal
+from app.database.models import MediaRecord
 
 
 cli = typer.Typer(
@@ -27,6 +29,25 @@ def import_files():
 
     typer.echo(
         f"Imported {len(results)} files."
+    )
+
+
+@cli.command()
+def stats():
+    """
+    Show library statistics.
+    """
+
+    session = SessionLocal()
+
+    count = session.query(
+        MediaRecord
+    ).count()
+
+    session.close()
+
+    typer.echo(
+        f"Media records: {count}"
     )
 
 

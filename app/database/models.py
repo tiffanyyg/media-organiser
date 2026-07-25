@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -16,9 +18,13 @@ class MediaRecord(Base):
 
     filename: Mapped[str]
 
+    original_filename: Mapped[str]
+
     path: Mapped[str]
 
     file_hash: Mapped[str]
 
     media_type: Mapped[str]
+
+    imported_at: Mapped[datetime]
 
