@@ -216,3 +216,56 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ==========================================
+# Media Organiser Project
+# ==========================================
+
+# Media library (never commit personal media)
+data/library/
+data/inbox/
+data/duplicates/
+data/screenshots/
+data/thumbnails/
+data/raw/
+
+# Database
+data/database/
+*.sqlite
+*.sqlite3
+*.db
+
+# Logs
+logs/
+data/logs/
+*.log
+
+# macOS
+.DS_Store
+
+# Temporary files
+tmp/
+temp/
+
+# Generated reports
+reports/
+
+# Configuration overrides
+config.local.json
+settings.local.json
+
+# AI models (downloaded separately)
+models/
+
+# ExifTool temporary files
+*_original
+
+# VS Code workspace settings (optional)
+.vscode/settings.json
+
+# Application storage
+storage/database/
+storage/cache/
+storage/logs/
+storage/reports/
+storage/thumbnails/
