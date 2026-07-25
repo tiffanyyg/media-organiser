@@ -3,8 +3,18 @@ from pathlib import Path
 import typer
 
 from app.importer.pipeline import import_media
-from app.cleanup.service import run_cleanup
-from app.cleanup.review_service import run_review
+
+from app.cleanup.service import (
+    run_cleanup,
+)
+
+from app.cleanup.review_service import (
+    run_review,
+)
+
+from app.duplicates.service import (
+    run_duplicate_review,
+)
 
 
 cli = typer.Typer(
@@ -13,14 +23,11 @@ cli = typer.Typer(
 )
 
 
+
 @cli.command(
     name="import-files"
 )
 def import_files():
-
-    """
-    Import photos and videos.
-    """
 
     inbox = Path(
         "data/inbox"
@@ -46,20 +53,11 @@ def import_files():
 @cli.command()
 def scan():
 
-    """
-    Scan inbox for media files.
-    """
-
     from app.importer.scanner import scan_directory
 
 
-    inbox = Path(
-        "data/inbox"
-    )
-
-
     files = scan_directory(
-        inbox
+        Path("data/inbox")
     )
 
 
@@ -72,22 +70,9 @@ def scan():
 @cli.command()
 def cleanup():
 
-    """
-    Analyse library and create cleanup report.
-    """
-
-    library = Path(
-        "storage/library"
-    )
-
-    reports = Path(
-        "storage/reports"
-    )
-
-
     report = run_cleanup(
-        library,
-        reports,
+        Path("storage/library"),
+        Path("storage/reports"),
     )
 
 
@@ -100,22 +85,9 @@ def cleanup():
 @cli.command()
 def review():
 
-    """
-    Move cleanup candidates into review folders.
-    """
-
-    library = Path(
-        "storage/library"
-    )
-
-    review_folder = Path(
-        "storage/review"
-    )
-
-
     results = run_review(
-        library,
-        review_folder,
+        Path("storage/library"),
+        Path("storage/review"),
     )
 
 
@@ -123,12 +95,40 @@ def review():
         "REVIEW COMPLETE"
     )
 
+
     typer.echo(
         f"Screenshots moved: {len(results['screenshots'])}"
     )
 
+
     typer.echo(
         f"Large files moved: {len(results['large_files'])}"
+    )
+
+
+
+@cli.command()
+def duplicates():
+
+    results = run_duplicate_review(
+        Path("storage/library"),
+        Path("storage/review/duplicates"),
+        Path("storage/reports"),
+    )
+
+
+    typer.echo(
+        "DUPLICATE REVIEW COMPLETE"
+    )
+
+
+    typer.echo(
+        f"Groups found: {len(results['groups'])}"
+    )
+
+
+    typer.echo(
+        f"Files moved: {len(results['moved'])}"
     )
 
 
