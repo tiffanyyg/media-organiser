@@ -1,6 +1,10 @@
 from pathlib import Path
 
-from app.database.repository import save_media
+from app.database.repository import (
+    save_media,
+    find_by_hash,
+)
+
 from app.duplicates.hasher import calculate_hash
 from app.importer.scanner import scan_directory
 from app.metadata.extractor import extract_image_metadata
@@ -21,6 +25,13 @@ def import_media(
         file_hash = calculate_hash(
             media.path
         )
+
+        existing = find_by_hash(
+            file_hash
+        )
+
+        if existing:
+            continue
 
         metadata = extract_image_metadata(
             media.path

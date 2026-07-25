@@ -8,6 +8,12 @@ DATABASE_PATH = Path(
     "storage/database/media.db"
 )
 
+DATABASE_PATH.parent.mkdir(
+    parents=True,
+    exist_ok=True,
+)
+
+
 DATABASE_URL = (
     f"sqlite:///{DATABASE_PATH}"
 )

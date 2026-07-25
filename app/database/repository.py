@@ -29,3 +29,19 @@ def save_media(
 
     session.close()
 
+def find_by_hash(file_hash: str):
+
+    session = SessionLocal()
+
+    record = (
+        session.query(MediaRecord)
+        .filter(
+            MediaRecord.file_hash == file_hash
+        )
+        .first()
+    )
+
+    session.close()
+
+    return record
+
