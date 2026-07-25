@@ -1,0 +1,18 @@
+[library]
+media_root = "data/library"
+inbox = "data/inbox"
+duplicates = "data/duplicates"
+screenshots = "data/screenshots"
+videos = "data/videos"
+
+[storage]
+database = "storage/database/media.db"
+thumbnails = "storage/thumbnails"
+logs = "storage/logs"
+
+[import]
+copy_files = true
+rename_files = true
+create_thumbnails = true
+detect_duplicates = true
+
