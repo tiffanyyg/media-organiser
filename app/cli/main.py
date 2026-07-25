@@ -3,6 +3,7 @@ import typer
 from pathlib import Path
 
 from app.importer.pipeline import import_media
+from app.cleanup.service import run_cleanup
 
 
 cli = typer.Typer(
@@ -16,6 +17,7 @@ cli = typer.Typer(
     name="import-files"
 )
 def import_files():
+
     """
     Import photos and videos.
     """
@@ -42,29 +44,62 @@ def import_files():
 
 @cli.command()
 def scan():
+
     """
     Scan inbox for media files.
     """
 
     from app.importer.scanner import scan_directory
 
+
     inbox = Path(
         "data/inbox"
     )
 
+
     files = scan_directory(
         inbox
     )
+
 
     typer.echo(
         f"Found {len(files)} files."
     )
 
 
+@cli.command()
+def cleanup():
+
+    """
+    Analyse library for cleanup candidates.
+    """
+
+    library = Path(
+        "storage/library"
+    )
+
+    reports = Path(
+        "storage/reports"
+    )
+
+
+    report = run_cleanup(
+        library,
+        reports,
+    )
+
+
+    typer.echo(
+        report
+    )
+
+
 def main():
+
     cli()
 
 
 if __name__ == "__main__":
+
     main()
 
