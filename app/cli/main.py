@@ -1,15 +1,15 @@
-import typer
-
 from pathlib import Path
+
+import typer
 
 from app.importer.pipeline import import_media
 from app.cleanup.service import run_cleanup
+from app.cleanup.review_service import run_review
 
 
 cli = typer.Typer(
     name="media-organiser",
     help="A local media organisation system.",
-    invoke_without_command=False,
 )
 
 
@@ -42,6 +42,7 @@ def import_files():
     )
 
 
+
 @cli.command()
 def scan():
 
@@ -67,11 +68,12 @@ def scan():
     )
 
 
+
 @cli.command()
 def cleanup():
 
     """
-    Analyse library for cleanup candidates.
+    Analyse library and create cleanup report.
     """
 
     library = Path(
@@ -94,12 +96,49 @@ def cleanup():
     )
 
 
+
+@cli.command()
+def review():
+
+    """
+    Move cleanup candidates into review folders.
+    """
+
+    library = Path(
+        "storage/library"
+    )
+
+    review_folder = Path(
+        "storage/review"
+    )
+
+
+    results = run_review(
+        library,
+        review_folder,
+    )
+
+
+    typer.echo(
+        "REVIEW COMPLETE"
+    )
+
+    typer.echo(
+        f"Screenshots moved: {len(results['screenshots'])}"
+    )
+
+    typer.echo(
+        f"Large files moved: {len(results['large_files'])}"
+    )
+
+
+
 def main():
 
     cli()
 
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     main()
 
