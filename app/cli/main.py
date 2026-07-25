@@ -3,51 +3,40 @@ import typer
 from pathlib import Path
 
 from app.importer.pipeline import import_media
-from app.database.database import SessionLocal
-from app.database.models import MediaRecord
 
 
 cli = typer.Typer(
     name="media-organiser",
     help="A local media organisation system.",
+    invoke_without_command=False,
 )
 
 
-@cli.command()
+@cli.command(
+    name="import-files"
+)
 def import_files():
     """
     Import photos and videos.
     """
 
-    inbox = Path("data/inbox")
-    library = Path("data/library")
+    inbox = Path(
+        "data/inbox"
+    )
 
-    results = import_media(
+    library = Path(
+        "storage/library"
+    )
+
+
+    report = import_media(
         inbox,
         library,
     )
 
-    typer.echo(
-        f"Imported {len(results)} files."
-    )
-
-
-@cli.command()
-def stats():
-    """
-    Show library statistics.
-    """
-
-    session = SessionLocal()
-
-    count = session.query(
-        MediaRecord
-    ).count()
-
-    session.close()
 
     typer.echo(
-        f"Media records: {count}"
+        report.summary()
     )
 
 
@@ -57,8 +46,18 @@ def scan():
     Scan inbox for media files.
     """
 
+    from app.importer.scanner import scan_directory
+
+    inbox = Path(
+        "data/inbox"
+    )
+
+    files = scan_directory(
+        inbox
+    )
+
     typer.echo(
-        "Scanner command coming soon."
+        f"Found {len(files)} files."
     )
 
 
